@@ -1,0 +1,16 @@
+[Unit]
+Description=Grader Agent Flask App
+After=network.target
+
+[Service]
+Type=simple
+User=contextgai
+WorkingDirectory=/home/contextgai/App/Grader-Agent
+Environment="PATH=/home/contextgai/App/Grader-Agent/venv/bin"
+EnvironmentFile=/home/contextgai/App/Grader-Agent/.env
+ExecStart=/home/contextgai/App/Grader-Agent/venv/bin/python app.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

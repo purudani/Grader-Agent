@@ -19,11 +19,11 @@
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             padding: 40px;
         }
         
@@ -31,12 +31,14 @@
             color: #333;
             margin-bottom: 10px;
             text-align: center;
+            font-size: 32px;
         }
         
         .subtitle {
             color: #666;
             text-align: center;
             margin-bottom: 30px;
+            font-size: 14px;
         }
         
         .form-group {
@@ -47,7 +49,8 @@
             display: block;
             margin-bottom: 8px;
             color: #333;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 14px;
         }
         
         input[type="file"] {
@@ -58,24 +61,12 @@
             background: #f9f9f9;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 14px;
         }
         
         input[type="file"]:hover {
             border-color: #667eea;
             background: #f0f0ff;
-        }
-        
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #667eea;
         }
         
         .btn {
@@ -91,14 +82,13 @@
             transition: transform 0.2s;
         }
         
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             transform: translateY(-2px);
         }
         
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
         }
         
         .loading {
@@ -138,70 +128,103 @@
         .result-card {
             background: #f9f9f9;
             border-left: 4px solid #667eea;
-            padding: 20px;
-            margin-bottom: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
             border-radius: 8px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
         }
         
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+        .result-left {
+            flex: 1;
+        }
+        
+        .result-right {
+            text-align: right;
+            min-width: 120px;
         }
         
         .filename {
             font-weight: 600;
             color: #333;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .student-name {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .student-id {
+            color: #999;
+            font-size: 12px;
+            font-style: italic;
         }
         
         .score {
-            font-size: 24px;
+            font-size: 36px;
             font-weight: bold;
             color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .score-label {
+            color: #999;
+            font-size: 12px;
+            text-transform: uppercase;
         }
         
         .feedback {
-            color: #666;
-            margin-top: 10px;
+            color: #555;
+            margin-top: 15px;
             line-height: 1.6;
+            font-size: 14px;
         }
         
         .deductions {
-            margin-top: 15px;
-            padding-top: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
             border-top: 1px solid #ddd;
         }
         
         .deductions h4 {
             color: #333;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             font-size: 14px;
-        }
-        
-        .deductions ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        
-        .deductions li {
-            color: #333;
-            padding: 8px 0;
-            padding-left: 20px;
-            position: relative;
-            line-height: 1.6;
-        }
-        
-        .deductions li strong {
-            color: #d32f2f;
             font-weight: 600;
         }
         
-        .deductions li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
+        .deduction-item {
+            background: #fff;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 3px solid #d32f2f;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .deduction-text {
+            flex: 1;
+            color: #333;
+            font-size: 13px;
+        }
+        
+        .deduction-points {
             color: #d32f2f;
+            font-weight: 600;
+            margin-left: 10px;
+            font-size: 13px;
+        }
+        
+        .deduction-section {
+            color: #999;
+            font-size: 11px;
+            margin-left: 8px;
         }
         
         .error {
@@ -213,16 +236,33 @@
             margin-top: 20px;
         }
         
+        .warning {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .total-deducted {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        
         .debug-toggle {
-            margin-top: 15px;
-            padding: 10px;
+            margin-top: 20px;
+            padding: 12px;
             background: #f5f5f5;
             border-radius: 6px;
             cursor: pointer;
             user-select: none;
-            font-size: 14px;
+            font-size: 13px;
             color: #667eea;
             font-weight: 500;
+            text-align: center;
+            transition: background 0.2s;
         }
         
         .debug-toggle:hover {
@@ -231,14 +271,14 @@
         
         .debug-content {
             display: none;
-            margin-top: 10px;
-            padding: 15px;
+            margin-top: 15px;
+            padding: 20px;
             background: #fafafa;
             border: 1px solid #ddd;
-            border-radius: 6px;
+            border-radius: 8px;
             font-family: 'Courier New', monospace;
             font-size: 12px;
-            max-height: 500px;
+            max-height: 600px;
             overflow-y: auto;
         }
         
@@ -247,37 +287,41 @@
         }
         
         .debug-section {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         .debug-section h4 {
             color: #333;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-size: 14px;
             font-weight: 600;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
         .debug-section pre {
             background: #fff;
-            padding: 10px;
-            border-radius: 4px;
+            padding: 15px;
+            border-radius: 6px;
             border: 1px solid #ddd;
             overflow-x: auto;
             white-space: pre-wrap;
             word-wrap: break-word;
+            font-size: 11px;
+            line-height: 1.5;
         }
         
-        .token-info {
+        .debug-info-row {
             display: flex;
             gap: 15px;
             margin-top: 8px;
             font-size: 11px;
             color: #666;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
-        .token-info span {
+        .debug-info-row span {
             background: #e3f2fd;
-            padding: 4px 8px;
+            padding: 4px 10px;
             border-radius: 4px;
         }
     </style>
@@ -286,6 +330,13 @@
     <div class="container">
         <h1>📝 Assignment Grader</h1>
         <p class="subtitle">Upload base solution and student submissions to grade</p>
+        
+        {% if not has_key %}
+        <div class="warning">
+            <strong>⚠️ Azure OpenAI not configured</strong><br>
+            Set AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT, and AZURE_OPENAI_DEPLOYMENT_NAME in .env
+        </div>
+        {% endif %}
         
         <form id="gradeForm">
             <div class="form-group">
@@ -298,27 +349,12 @@
                 <input type="file" id="student_files" name="student_files" accept=".ipynb,.docx" multiple required>
             </div>
             
-            {% if not has_env_key %}
-            <div class="error" style="margin-bottom: 20px;">
-                <strong>⚠️ API Key Not Found</strong><br>
-                Please set the OPENAI_API_KEY environment variable before using this tool.<br>
-                <small style="display: block; margin-top: 8px;">
-                    Run: <code>export OPENAI_API_KEY="sk-..."</code> in your terminal, or create a <code>.env</code> file.
-                </small>
-            </div>
-            {% else %}
-            <div style="background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px; border-radius: 6px; margin-bottom: 20px;">
-                <strong style="color: #2e7d32;">✓ API Key Configured</strong><br>
-                <small style="color: #666;">Using OPENAI_API_KEY from environment variables</small>
-            </div>
-            {% endif %}
-            
-            <button type="submit" class="btn" id="submitBtn" {% if not has_env_key %}disabled{% endif %}>Grade Assignments</button>
+            <button type="submit" class="btn" {% if not has_key %}disabled{% endif %}>Grade Assignments</button>
         </form>
         
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p style="margin-top: 10px;">Grading in progress...</p>
+            <p style="margin-top: 10px; color: #666;">Grading in progress...</p>
         </div>
         
         <div class="results" id="results"></div>
@@ -327,33 +363,21 @@
     <script>
         document.getElementById('gradeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const formData = new FormData(e.target);
             
-            const formData = new FormData();
-            formData.append('base_file', document.getElementById('base_file').files[0]);
-            
-            const studentFiles = document.getElementById('student_files').files;
-            for (let i = 0; i < studentFiles.length; i++) {
-                formData.append('student_files', studentFiles[i]);
-            }
-            
-            // Show loading
             document.getElementById('loading').classList.add('active');
             document.getElementById('results').classList.remove('active');
-            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('results').innerHTML = '';
+            document.querySelector('.btn').disabled = true;
             
             try {
-                const response = await fetch('/grade', {
-                    method: 'POST',
-                    body: formData
-                });
+                const res = await fetch('/grade', { method: 'POST', body: formData });
+                const data = await res.json();
                 
-                const data = await response.json();
-                
-                if (!response.ok) {
+                if (!res.ok) {
                     throw new Error(data.error || 'Grading failed');
                 }
                 
-                // Display results
                 displayResults(data.results);
                 
             } catch (error) {
@@ -365,77 +389,67 @@
                 document.getElementById('results').classList.add('active');
             } finally {
                 document.getElementById('loading').classList.remove('active');
-                document.getElementById('submitBtn').disabled = false;
+                document.querySelector('.btn').disabled = false;
             }
         });
         
         function displayResults(results) {
             const resultsDiv = document.getElementById('results');
-            let html = '<h2 style="margin-bottom: 20px;">Grading Results</h2>';
+            let html = '<h2 style="margin-bottom: 20px; color: #333;">Grading Results</h2>';
             
             results.forEach((result, index) => {
-                if (result.error && !result.debug) {
+                if (result.error) {
                     html += `
-                        <div class="result-card">
-                            <div class="result-header">
-                                <span class="filename">${result.filename}</span>
-                                <span class="score" style="color: #d32f2f;">Error</span>
+                        <div class="result-card" style="border-left-color: #d32f2f;">
+                            <div class="result-left">
+                                <div class="filename">${result.filename}</div>
+                                <div class="error" style="margin-top: 10px;">${result.error}</div>
                             </div>
-                            <div class="feedback">${result.error}</div>
                         </div>
                     `;
                 } else {
-                    const debugId = `debug-${index}`;
-                    const hasDebug = result.debug !== undefined;
-                    
-                    // Get student display name
-                    const studentDisplay = result.student_name && result.student_name !== 'Unknown' 
-                        ? `${result.student_name} (${result.student_id})`
-                        : result.student_id !== 'Unknown' 
-                            ? result.student_id 
-                            : result.filename;
-                    
-                    // Calculate total deducted
                     const totalDeducted = 100 - result.score;
+                    const deductions = result.deductions || [];
                     
                     html += `
                         <div class="result-card">
-                            <div class="result-header">
-                                <span class="filename">${studentDisplay}</span>
-                                <span class="score">${result.score}/100</span>
+                            <div class="result-left">
+                                <div class="filename">${result.filename}</div>
+                                ${result.student_name ? `<div class="student-name">${result.student_name}</div>` : ''}
+                                ${result.student_id ? `<div class="student-id">ID: ${result.student_id}</div>` : ''}
+                                
+                                <div class="feedback">${result.feedback}</div>
+                                
+                                ${deductions.length > 0 ? `
+                                    <div class="deductions">
+                                        <h4>Detailed Deductions:</h4>
+                                        ${deductions.map(d => `
+                                            <div class="deduction-item">
+                                                <span class="deduction-text">
+                                                    ${d.issue}
+                                                    ${d.section ? `<span class="deduction-section">(${d.section})</span>` : ''}
+                                                </span>
+                                                <span class="deduction-points">-${d.points || 0} pts</span>
+                                            </div>
+                                        `).join('')}
+                                        ${totalDeducted > 0 ? `<div class="total-deducted">Total Deducted: ${totalDeducted} points</div>` : ''}
+                                    </div>
+                                ` : ''}
+                                
+                                ${result.debug ? `
+                                    <div class="debug-toggle" onclick="toggleDebug('debug-${index}')">
+                                        🔍 Show API Debug Details
+                                    </div>
+                                    <div class="debug-content" id="debug-${index}">
+                                        ${formatDebugInfo(result.debug)}
+                                    </div>
+                                ` : ''}
                             </div>
-                            ${totalDeducted > 0 ? `
-                                <div style="color: #d32f2f; font-size: 14px; margin-top: 5px;">
-                                    Total Deducted: ${totalDeducted} points
-                                </div>
-                            ` : ''}
-                            <div class="feedback">${result.feedback}</div>
-                            ${result.deductions && result.deductions.length > 0 ? `
-                                <div class="deductions">
-                                    <h4>Detailed Deduction Breakdown:</h4>
-                                    <ul>
-                                        ${result.deductions.map(d => {
-                                            if (typeof d === 'string') {
-                                                // Old format fallback
-                                                return `<li>${d}</li>`;
-                                            } else {
-                                                // New format with points
-                                                const points = d.points_deducted || 0;
-                                                const section = d.section ? ` <span style="color: #666; font-size: 12px;">(${d.section})</span>` : '';
-                                                return `<li><strong>-${points} points:</strong> ${d.issue}${section}</li>`;
-                                            }
-                                        }).join('')}
-                                    </ul>
-                                </div>
-                            ` : ''}
-                            ${hasDebug ? `
-                                <div class="debug-toggle" onclick="toggleDebug('${debugId}')">
-                                    🔍 Show API Details (Prompt, Request, Response)
-                                </div>
-                                <div class="debug-content" id="${debugId}">
-                                    ${formatDebugInfo(result.debug)}
-                                </div>
-                            ` : ''}
+                            
+                            <div class="result-right">
+                                <div class="score">${result.score}</div>
+                                <div class="score-label">out of 100</div>
+                            </div>
                         </div>
                     `;
                 }
@@ -451,10 +465,10 @@
             
             if (debugContent.classList.contains('active')) {
                 debugContent.classList.remove('active');
-                toggle.textContent = '🔍 Show API Details (Prompt, Request, Response)';
+                toggle.textContent = '🔍 Show API Debug Details';
             } else {
                 debugContent.classList.add('active');
-                toggle.textContent = '🔽 Hide API Details';
+                toggle.textContent = '🔽 Hide API Debug Details';
             }
         }
         
@@ -463,39 +477,45 @@
             
             // API Request Section
             if (debug.api_request) {
+                const req = debug.api_request;
                 html += `
                     <div class="debug-section">
                         <h4>📤 API Request</h4>
-                        <div><strong>Model:</strong> ${debug.api_request.model}</div>
-                        <div><strong>Temperature:</strong> ${debug.api_request.temperature}</div>
-                        <div class="token-info">
-                            <span>Base Content: ${debug.api_request.base_content_length} chars</span>
-                            <span>Student Content: ${debug.api_request.student_content_length} chars</span>
-                            <span>Total Prompt: ${debug.api_request.prompt_length} chars</span>
+                        <div class="debug-info-row">
+                            <span><strong>Model:</strong> ${req.model}</span>
+                            <span><strong>Endpoint:</strong> ${req.endpoint || 'N/A'}</span>
+                            <span><strong>API Version:</strong> ${req.api_version}</span>
+                            <span><strong>Temperature:</strong> ${req.temperature}</span>
+                        </div>
+                        <div class="debug-info-row" style="margin-top: 10px;">
+                            <span><strong>Prompt Length:</strong> ${req.prompt_length} characters</span>
                         </div>
                         <h4 style="margin-top: 15px;">System Message:</h4>
-                        <pre>${escapeHtml(debug.api_request.system_message)}</pre>
+                        <pre>${escapeHtml(req.system_message)}</pre>
                         <h4 style="margin-top: 15px;">User Prompt (Full):</h4>
-                        <pre>${escapeHtml(debug.api_request.user_prompt)}</pre>
+                        <pre>${escapeHtml(req.user_prompt)}</pre>
                     </div>
                 `;
             }
             
             // API Response Section
             if (debug.api_response) {
-                const usage = debug.api_response.usage || {};
+                const resp = debug.api_response;
+                const usage = resp.usage || {};
                 html += `
                     <div class="debug-section">
                         <h4>📥 API Response</h4>
-                        <div><strong>Model Used:</strong> ${debug.api_response.model}</div>
-                        <div><strong>Finish Reason:</strong> ${debug.api_response.finish_reason}</div>
-                        <div class="token-info">
-                            <span>Prompt Tokens: ${usage.prompt_tokens || 'N/A'}</span>
-                            <span>Completion Tokens: ${usage.completion_tokens || 'N/A'}</span>
-                            <span>Total Tokens: ${usage.total_tokens || 'N/A'}</span>
+                        <div class="debug-info-row">
+                            <span><strong>Model Used:</strong> ${resp.model_used || 'N/A'}</span>
+                            <span><strong>Finish Reason:</strong> ${resp.finish_reason || 'N/A'}</span>
+                        </div>
+                        <div class="debug-info-row" style="margin-top: 10px;">
+                            ${usage.prompt_tokens ? `<span><strong>Prompt Tokens:</strong> ${usage.prompt_tokens}</span>` : ''}
+                            ${usage.completion_tokens ? `<span><strong>Completion Tokens:</strong> ${usage.completion_tokens}</span>` : ''}
+                            ${usage.total_tokens ? `<span><strong>Total Tokens:</strong> ${usage.total_tokens}</span>` : ''}
                         </div>
                         <h4 style="margin-top: 15px;">Raw JSON Response:</h4>
-                        <pre>${escapeHtml(debug.api_response.raw_response)}</pre>
+                        <pre>${escapeHtml(JSON.stringify(JSON.parse(resp.raw_response), null, 2))}</pre>
                     </div>
                 `;
             }
@@ -505,18 +525,7 @@
                 html += `
                     <div class="debug-section">
                         <h4>✅ Parsed Result</h4>
-                        <pre>${JSON.stringify(debug.parsed_result, null, 2)}</pre>
-                    </div>
-                `;
-            }
-            
-            // Error Section
-            if (debug.error) {
-                html += `
-                    <div class="debug-section">
-                        <h4>❌ Error Details</h4>
-                        <div><strong>Error Type:</strong> ${debug.error_type || 'Unknown'}</div>
-                        <div><strong>Error Message:</strong> ${escapeHtml(debug.error)}</div>
+                        <pre>${escapeHtml(JSON.stringify(debug.parsed_result, null, 2))}</pre>
                     </div>
                 `;
             }
@@ -532,4 +541,3 @@
     </script>
 </body>
 </html>
-
