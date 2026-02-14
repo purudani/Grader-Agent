@@ -109,28 +109,47 @@ def grade():
             student_content = extract_text(student_path)
             
             # Grade with Azure OpenAI
-            prompt = f"""Grade this student submission against the base solution.
+            prompt = f"""You are grading a student's submission against a reference solution.
 
-BASE SOLUTION:
+IMPORTANT GRADING GUIDELINES:
+- Do NOT penalize minor style differences or variable naming.
+- Partial credit is encouraged when the approach is reasonable.
+- Focus on correctness, logic, and completeness over exact matching.
+
+BASE SOLUTION (for reference):
+------------------------------
 {base_content}
 
 STUDENT SUBMISSION:
+-------------------
 {student_content}
 
-Provide:
-1. Score out of 100
-2. Brief feedback
-3. Detailed deductions with points lost for each issue
+EVALUATION CRITERIA:
+1. Correctness of core logic and results
+2. Completeness of the solution
+3. Reasonable handling of edge cases
+4. Clarity of explanations or comments (if applicable)
 
-Respond in JSON:
+SCORING RULES:
+- Start from 100 points.
+- Deduct points ONLY for clear mistakes or missing components.
+- Small issues should incur small deductions (1–5 points).
+- Larger conceptual errors may incur larger deductions.
+- Do not invent issues if the solution is acceptable.
+
+OUTPUT FORMAT:
+Respond ONLY in valid JSON with the following structure:
+
 {{
-    "score": 85,
-    "feedback": "Good work overall",
-    "deductions": [
-        {{"issue": "Missing error handling", "points": 5, "section": "Q1"}},
-        {{"issue": "Incorrect calculation", "points": 10, "section": "Q2"}}
-    ]
-}}"""
+  "score": xx,
+  "feedback": "<brief, constructive summary of strengths and weaknesses>",
+  "deductions": [
+    {{"issue": " ", "points": x, "section": " "}},
+    {{"issue": " ", "points": x, "section": " "}}
+  ]
+}}
+
+If there are no meaningful issues, return an empty deductions list."""
 
             # Prepare API request details for debugging
             system_message = "You are a grading assistant. Always respond with valid JSON."
@@ -140,7 +159,6 @@ Respond in JSON:
                     {"role": "system", "content": system_message},
                     {"role": "user", "content": prompt}
                 ],
-                "temperature": 0.3,
                 "response_format": {"type": "json_object"}
             }
             
