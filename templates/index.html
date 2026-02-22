@@ -340,13 +340,13 @@
         
         <form id="gradeForm">
             <div class="form-group">
-                <label for="base_file">Base Solution File (.ipynb or .docx)</label>
-                <input type="file" id="base_file" name="base_file" accept=".ipynb,.docx" required>
+                <label for="base_file">Base Solution File (any document/code format)</label>
+                <input type="file" id="base_file" name="base_file" required>
             </div>
             
             <div class="form-group">
-                <label for="student_files">Student Submission Files (.ipynb or .docx)</label>
-                <input type="file" id="student_files" name="student_files" accept=".ipynb,.docx" multiple required>
+                <label for="student_files">Student Submission Files (any document/code format)</label>
+                <input type="file" id="student_files" name="student_files" multiple required>
             </div>
             
             <button type="submit" class="btn" {% if not has_key %}disabled{% endif %}>Grade Assignments</button>
@@ -411,6 +411,7 @@
                 } else {
                     const totalDeducted = 100 - result.score;
                     const deductions = result.deductions || [];
+                    const questionFeedback = result.question_feedback || [];
                     
                     html += `
                         <div class="result-card">
@@ -420,6 +421,19 @@
                                 ${result.student_id ? `<div class="student-id">ID: ${result.student_id}</div>` : ''}
                                 
                                 <div class="feedback">${result.feedback}</div>
+
+                                ${questionFeedback.length > 0 ? `
+                                    <div class="deductions">
+                                        <h4>Question-wise Feedback:</h4>
+                                        ${questionFeedback.map(q => `
+                                            <div class="deduction-item">
+                                                <span class="deduction-text">
+                                                    <strong>${formatQuestionLabel(q.question_number)}:</strong> ${q.reasoning}
+                                                </span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : ''}
                                 
                                 ${deductions.length > 0 ? `
                                     <div class="deductions">
@@ -427,8 +441,7 @@
                                         ${deductions.map(d => `
                                             <div class="deduction-item">
                                                 <span class="deduction-text">
-                                                    ${d.issue}
-                                                    ${d.section ? `<span class="deduction-section">(${d.section})</span>` : ''}
+                                                    ${d.section ? `<strong>${formatQuestionLabel(d.section)}:</strong> ` : ''}${d.issue}
                                                 </span>
                                                 <span class="deduction-points">-${d.points || 0} pts</span>
                                             </div>
@@ -458,6 +471,11 @@
             
             resultsDiv.innerHTML = html;
             resultsDiv.classList.add('active');
+        }
+
+        function formatQuestionLabel(value) {
+            const label = String(value || 'General').trim();
+            return /^question\b/i.test(label) ? label : `Question ${label}`;
         }
         
         function toggleDebug(debugId) {

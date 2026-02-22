@@ -45,7 +45,7 @@ Grade student assignments using Azure OpenAI.
 
 ## Usage
 
-1. Upload base solution file
-2. Upload student submission files
+1. Upload base solution file (supports notebooks, Word, PDF, PPTX, XLSX, and common text/code formats)
+2. Upload student submission files (same format support)
 3. Click "Grade"
 4. View results with scores and feedback

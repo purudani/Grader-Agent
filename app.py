@@ -11,6 +11,21 @@ from docx import Document
 from openai import AzureOpenAI
 from dotenv import load_dotenv
 
+try:
+    from pypdf import PdfReader
+except ImportError:  # pragma: no cover
+    PdfReader = None
+
+try:
+    from pptx import Presentation
+except ImportError:  # pragma: no cover
+    Presentation = None
+
+try:
+    from openpyxl import load_workbook
+except ImportError:  # pragma: no cover
+    load_workbook = None
+
 load_dotenv()
 
 # Handle deployment at /grader-gpt subdirectory
@@ -23,21 +38,72 @@ app.config['UPLOAD_FOLDER'] = tempfile.mkdtemp()
 APPLICATION_ROOT = os.getenv('APPLICATION_ROOT', '/')
 
 
+def _read_as_plain_text(file_path):
+    """Best-effort UTF text loader for generic text files."""
+    with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+        return f.read()
+
+
 def extract_text(file_path):
-    """Extract all text from notebook or docx file."""
-    if file_path.endswith('.ipynb'):
+    """Extract text from common assignment document formats."""
+    ext = os.path.splitext(file_path)[1].lower()
+
+    if ext == '.ipynb':
         nb = nbformat.read(file_path, as_version=4)
         text = []
         for cell in nb.cells:
             text.append(cell.get('source', ''))
         return '\n\n'.join(text)
-    elif file_path.endswith('.docx'):
+    if ext == '.docx':
         doc = Document(file_path)
         text = []
         for para in doc.paragraphs:
             text.append(para.text)
         return '\n\n'.join(text)
-    return ""
+
+    if ext == '.pdf':
+        if not PdfReader:
+            return _read_as_plain_text(file_path)
+        reader = PdfReader(file_path)
+        pages = [(page.extract_text() or "") for page in reader.pages]
+        return "\n\n".join(pages)
+
+    if ext == '.pptx':
+        if not Presentation:
+            return _read_as_plain_text(file_path)
+        presentation = Presentation(file_path)
+        text = []
+        for slide in presentation.slides:
+            for shape in slide.shapes:
+                if hasattr(shape, "text") and shape.text:
+                    text.append(shape.text)
+        return "\n\n".join(text)
+
+    if ext in {'.xlsx', '.xlsm'}:
+        if not load_workbook:
+            return _read_as_plain_text(file_path)
+        wb = load_workbook(file_path, data_only=True)
+        text = []
+        for sheet in wb.worksheets:
+            text.append(f"Sheet: {sheet.title}")
+            for row in sheet.iter_rows(values_only=True):
+                row_values = [str(v) for v in row if v is not None]
+                if row_values:
+                    text.append(" | ".join(row_values))
+        return "\n".join(text)
+
+    text_like_extensions = {
+        '.txt', '.md', '.csv', '.json', '.jsonl', '.yaml', '.yml', '.xml',
+        '.html', '.htm', '.py', '.js', '.ts', '.java', '.c', '.cpp', '.h',
+        '.sql', '.r', '.tex', '.sh', '.bat', '.log', '.ini', '.cfg', '.toml',
+        '.rtf', '.doc'
+    }
+
+    if ext in text_like_extensions:
+        return _read_as_plain_text(file_path)
+
+    # Last-resort fallback: attempt text decode so unknown formats still get parsed if possible.
+    return _read_as_plain_text(file_path)
 
 
 def get_azure_client():
@@ -143,13 +209,17 @@ Respond ONLY in valid JSON with the following structure:
 {{
   "score": xx,
   "feedback": "<brief, constructive summary of strengths and weaknesses>",
+  "question_feedback": [
+    {{"question_number": "1", "reasoning": " "}},
+    {{"question_number": "2", "reasoning": " "}}
+  ],
   "deductions": [
     {{"issue": " ", "points": x, "section": " "}},
     {{"issue": " ", "points": x, "section": " "}}
   ]
 }}
 
-If there are no meaningful issues, return an empty deductions list."""
+If there are no meaningful issues, return empty question_feedback and deductions lists."""
 
             # Prepare API request details for debugging
             system_message = "You are a grading assistant. Always respond with valid JSON."
@@ -207,7 +277,6 @@ If there are no meaningful issues, return an empty deductions list."""
             # Look for student info in content (simple extraction)
             content_lower = student_content.lower()
             if 'netid' in content_lower or 'student id' in content_lower:
-                import re
                 netid_match = re.search(r'(?:netid|student\s+id)\s*[:=]\s*(\S+)', student_content, re.IGNORECASE)
                 if netid_match:
                     student_id = netid_match.group(1).strip()
@@ -223,6 +292,7 @@ If there are no meaningful issues, return an empty deductions list."""
                 'student_id': student_id,
                 'score': result.get('score', 0),
                 'feedback': result.get('feedback', ''),
+                'question_feedback': result.get('question_feedback', []),
                 'deductions': result.get('deductions', []),
                 'debug': debug_info
             })
