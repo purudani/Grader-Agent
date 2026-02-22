@@ -254,7 +254,7 @@ If there are no meaningful issues, return empty question_feedback and deductions
                     "system_message": system_message,
                     "user_prompt": prompt,
                     "prompt_length": len(prompt),
-                    "temperature": 0.3
+                    "temperature": 1
                 },
                 "api_response": {
                     "model_used": response.model if hasattr(response, 'model') else model,
